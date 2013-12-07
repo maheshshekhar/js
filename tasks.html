@@ -1,0 +1,38 @@
+<html ng-app>
+    <head>
+        <script type="text/javascript"
+                  src="http://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
+    </head>
+    <body>
+    <div>
+        <div ng-controller="TodoController">
+            <ul>
+                <li ng-repeat="task in tasks">
+                    {{task.name}}
+                </li>
+            </ul>
+            <form action="">
+                Task : <input type="text" ng-model="task"/>
+                <button type="submit" ng-click="addTask()"/>
+            </form>
+        </div>
+    </div>
+    </body>
+    <script>
+        function TodoController($scope, $http) {
+
+            function refresh(){
+                $http.get('/collections/task').success(function(data) {
+                    $scope.tasks = data;
+                });
+            }
+            refresh();
+
+            $scope.addTask = function() {
+                $http.post('/collections/task', {name : $scope.task}).success(function() {
+                    refresh();
+                });
+            }
+        }
+    </script>
+</html>
